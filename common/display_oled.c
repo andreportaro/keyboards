@@ -2,8 +2,16 @@
 #include "quantum.h"
 
 #ifdef OLED_ENABLE
+#define OLED_TIMEOUT 60000
+
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     return OLED_ROTATION_270; // vertical for master
+}
+
+void housekeeping_task_kb(void) {
+    if (is_oled_on() && last_input_activity_elapsed() > OLED_TIMEOUT) {
+        oled_off();
+    }
 }
 
 static void render_logo(void) {
